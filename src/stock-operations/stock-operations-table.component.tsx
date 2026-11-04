@@ -234,7 +234,7 @@ const StockOperations: React.FC<StockOperationsTableProps> = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows?.map((row: any, index) => {
+                {rows?.map((row: any) => {
                   const props = getRowProps({ row });
                   const expandedRowProps = getExpandedRowProps({ row });
                   return (
@@ -257,7 +257,7 @@ const StockOperations: React.FC<StockOperationsTableProps> = () => {
                       </TableExpandRow>
                       {row.isExpanded ? (
                         <TableExpandedRow colSpan={headers.length + 2}>
-                          <StockOperationExpandedRow model={items[index]} />
+                          <StockOperationExpandedRow model={items.find((item) => item.uuid === row.id)} />
                         </TableExpandedRow>
                       ) : (
                         <TableExpandedRow className={styles.hiddenRow} colSpan={headers.length + 2} />
