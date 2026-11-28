@@ -26,9 +26,12 @@ const StockItemsTable: React.FC<Props> = ({ items }) => {
   const pageSizesOptions = useMemo(() => [5, 10, 20, 50, 100], []);
   const [searchText, setSearchText] = useState<string>('');
 
+  // Items without a common name, like most drugs, are shown and searched by their stock item name
+  const itemName = (item: StockOperationItemDTO) => item.commonName || item.stockItemName || '';
+
   const handleSearch = (item: StockOperationItemDTO) => {
     if (!searchText) return true;
-    return item.commonName?.toLowerCase().includes(searchText.trim().toLowerCase());
+    return itemName(item).toLowerCase().includes(searchText.trim().toLowerCase());
   };
   const filtered = items.filter(handleSearch);
   const { results, totalPages, currentPage, goTo } = usePagination(filtered, pageSize);
@@ -64,6 +67,7 @@ const StockItemsTable: React.FC<Props> = ({ items }) => {
       results.map((item, index) => ({
         id: index,
         ...item,
+        commonName: itemName(item),
         expiration: item.expiration ? formatDate(parseStockExpiryDate(item.expiration)) : '--',
       })),
     [results],

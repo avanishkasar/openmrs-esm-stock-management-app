@@ -111,6 +111,28 @@ describe('StockOperations', () => {
     expect(screen.queryByText('RCPT-0049')).not.toBeInTheDocument();
   });
 
+  it('shows the stock item name in the Items column when an item has no common name', () => {
+    mockPages({
+      items: [
+        {
+          uuid: 'uuid-50',
+          operationNumber: 'RCPT-0050',
+          status: 'NEW',
+          stockOperationItems: [{ commonName: null, stockItemName: 'Vitamin A' }],
+        },
+      ],
+      tableHeaders: [
+        { id: 0, key: 'operationNumber', header: 'Number' },
+        { id: 1, key: 'stockOperationItems', header: 'Items' },
+      ],
+      totalItems: 1,
+    });
+
+    render(<StockOperations />);
+
+    expect(screen.getByText('Vitamin A')).toBeInTheDocument();
+  });
+
   describe('status column', () => {
     beforeEach(() => {
       mockPages({ items: operations, tableHeaders, totalItems: 2 });

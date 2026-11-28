@@ -32,3 +32,30 @@ describe('StockItemsTable search', () => {
     expect(screen.queryByText('Ibuprofen 200mg')).not.toBeInTheDocument();
   });
 });
+
+describe('StockItemsTable item name', () => {
+  const drugItem = {
+    commonName: null,
+    stockItemName: 'Vitamin A',
+    batchNo: 'VA-1',
+    quantity: 5,
+    expiration: null,
+    stockItemPackagingUOMName: 'Tablet',
+  } as any;
+
+  it('shows the stock item name when the item has no common name', () => {
+    render(<StockItemsTable items={[drugItem]} />);
+
+    expect(screen.getByText('Vitamin A')).toBeInTheDocument();
+  });
+
+  it('finds an item without a common name by its stock item name', async () => {
+    const user = userEvent.setup();
+    render(<StockItemsTable items={[...items, drugItem]} />);
+
+    await user.type(screen.getByRole('searchbox'), 'vitamin');
+
+    expect(screen.getByText('Vitamin A')).toBeInTheDocument();
+    expect(screen.queryByText('Acetaminophen')).not.toBeInTheDocument();
+  });
+});

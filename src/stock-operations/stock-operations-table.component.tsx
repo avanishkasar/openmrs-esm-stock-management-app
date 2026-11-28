@@ -135,7 +135,7 @@ const StockOperations: React.FC<StockOperationsTableProps> = () => {
         const commonNames =
           stockOperation?.stockOperationItems
             ?.slice(0, itemCountGreaterThanThreshhold ? threshHold : undefined)
-            .map((item) => item.commonName)
+            .map((item) => item.commonName || item.stockItemName)
             .join(', ') ?? '';
 
         return {
